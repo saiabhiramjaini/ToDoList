@@ -13,8 +13,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final _textController = TextEditingController();
 
+  //reference for our database
   ToDoDataBase db = ToDoDataBase();
-
+  
+  // reference our box
   final _myBox = Hive.box('myBox');
 
   void updateCheckBox(bool val, int index){
@@ -48,9 +50,9 @@ class _HomePageState extends State<HomePage> {
                 MaterialButton(
                   onPressed: (){
                     setState(() {
-                      db.todoList.add([_textController.text,false]);
+                      db.todoList.add([_textController.text,false]); //adding todo task to our list
                     });
-                    db.updateData();
+                    db.updateData();  //change is made in our list so we need to update it(added data)
                     _textController.clear();
                     Navigator.of(context).pop();
                   },
@@ -64,23 +66,23 @@ class _HomePageState extends State<HomePage> {
       }
     );
   }
-
+  // deleting todo data from our list
   void deleteTask(int index){
     setState(() {
       db.todoList.removeAt(index);
     });
-    db.updateData();
+    db.updateData();  //change is made in our list so we need to update it
   }
 
   @override
   void initState() {
     super.initState();
-    if(_myBox.get("TODOLIST") == null)
+    if(_myBox.get("TODOLIST") == null)  //no data in our hive (or) app is being used for first time
     {
-      db.createInitialData();
+      db.createInitialData();           //inside our "ToDoDataBase" we have a method "createInitailData"
     }  
     else{
-      db.loadData();
+      db.loadData();                    //if the user is not new then load the data from our database
     }
   }
 
